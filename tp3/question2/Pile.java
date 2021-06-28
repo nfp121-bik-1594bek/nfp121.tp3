@@ -15,60 +15,94 @@ public class Pile implements PileI {
     private int ptr;
 
     public Pile(int taille) {
+        if (taille <= 0){
+        taille = PileI.CAPACITE_PAR_DEFAUT;
+        }
+        this.zone = new Object[taille];
+        this.ptr = 0;
         // traiter le cas <=0
         // a completer
     }
 
     public Pile() {
-        this(0);
+        this(PileI.CAPACITE_PAR_DEFAUT);
     }
 
     public void empiler(Object o) throws PilePleineException {
-        // a completer
+        if (estPleine()){
+            throw new PilePleineException();
+        }else{
+            this.zone[this.ptr] = o;
+            ptr++;
+        }
+        
+        
     }
 
     public Object depiler() throws PileVideException {
-        // a completer
-        return null;
+        if (estVide()){
+            throw new PileVideException();
+        }else{
+            this.ptr--;
+        return zone[ptr];
+        }
+        
     }
 
     public Object sommet() throws PileVideException {
-        // a completer
-        return null;
+        if(estVide()){
+            throw new PileVideException();
+        }
+        return zone[0];
     }
 
     public int capacite() {
-        // a completer
-        return -1;
+        return zone.length;
     }
 
     public int taille() {
-        // a completer
-        return -1;
+        if (estVide()){
+            return 0;
+        }else if(estPleine()){//Dans le cas elle est pleine
+            return zone.length;
+        }else{//Dans le cas elle n'est pas pleine
+            return this.ptr;
+        }
     }
 
     public boolean estVide() {
-        // a completer
-        return false;
+        return ptr == 0;
     }
 
     public boolean estPleine() {
-        // a completer
-        return false;
+        return ptr == zone.length;
     }
-
+    
+     public int hashCode() {
+        return toString().hashCode();
+    }
+    
     public boolean equals(Object o) {
-        // a completer
-        return false;
+        PileI newPile = (PileI)o;
+        if (o instanceof PileI) {
+            boolean check = this.capacite() == newPile.capacite() && this.hashCode() == newPile.hashCode();
+            return check;
+        }else{
+            return false;
+        }
     }
 
     // fonction fournie
-    public int hashCode() {
-        return toString().hashCode();
-    }
-
-    public String toString() {
-        // a completer
-        return null;
+   
+    @Override
+   public String toString() {
+        StringBuffer sb = new StringBuffer("[");
+        for (int i = ptr - 1; i >= 0; i--) {
+            sb.append(zone[i].toString());
+            if (i > 0)
+                sb.append(",");
+        }
+        sb.append("]");
+        return sb.toString();
     }
 }
